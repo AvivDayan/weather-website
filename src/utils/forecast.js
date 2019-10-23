@@ -13,6 +13,6 @@ const forecast=(longitude,latitude,callback)=>{
             callback(undefined,`${body.daily.data[0].summary} It is currently ${body.currently.temperature}. There is a ${body.currently.precipProbability}% chance of rain.`);
         }
     });
-}
+} 
 
 module.exports=forecast;
