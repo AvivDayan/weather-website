@@ -11,9 +11,11 @@ const port=process.env.PORT||3000;
 
 const viewsPath=path.join(__dirname,'../templates/views');
 const partialsPath=path.join(__dirname,'../templates/partials');
+const publicFolder=path.join(__dirname,"../public");
+
 app.set('view engine','hbs');
 app.set('views',viewsPath);
-app.use(express.static(path.join(__dirname,"../public")));
+app.use(express.static(publicFolder));
 hbs.registerPartials(partialsPath);
 
 app.get('',(req,res)=>{
