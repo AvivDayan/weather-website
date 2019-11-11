@@ -72,6 +72,12 @@ app.get('/weather',async (req,res)=>{
     addressToForecast(req.query.address).then((result)=>{
         res.send(result);
     }).catch((error)=>{res.send({error})});
+
+    try{
+
+    }catch(error){
+        res.send({error});
+    }
 })
 
 
