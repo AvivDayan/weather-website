@@ -56,25 +56,34 @@ app.get('/help',(req,res)=>{
 // })
 
 app.get('/weather',async (req,res)=>{
+    // if(!req.query.address){
+    //     return res.send({ error:"You must provide an address."})
+    // }
+
+    // const addressToForecast=async (address)=>{
+    //     const geoCode=await geocode(address);
+    //     const weather=await forecast(geoCode.longitude,geoCode.latitude);
+    //     return {
+    //         location:geoCode.location,
+    //         forecast:weather
+    //     };
+    // }
+
+    // addressToForecast(req.query.address).then((result)=>{
+    //     res.send(result);
+    // }).catch((error)=>{res.send({error})});
+
     if(!req.query.address){
         return res.send({ error:"You must provide an address."})
     }
 
-    const addressToForecast=async (address)=>{
-        const geoCode=await geocode(address);
-        const weather=await forecast(geoCode.longitude,geoCode.latitude);
-        return {
-            location:geoCode.location,
-            forecast:weather
-        };
-    }
-
-    addressToForecast(req.query.address).then((result)=>{
-        res.send(result);
-    }).catch((error)=>{res.send({error})});
-
     try{
-
+        const {longitude,latitude,location}=await geocode(req.query.address);
+        const forecastData=await forecast(longitude,latitude);
+        res.send({
+            location,
+            forecast:forecastData
+        })
     }catch(error){
         res.send({error});
     }
