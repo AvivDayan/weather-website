@@ -41,19 +41,40 @@ app.get('/help',(req,res)=>{
 })
 
 
-app.get('/weather',(req,res)=>{
+// app.get('/weather',(req,res)=>{
+//     if(!req.query.address){
+//         return res.send({ error:"You must provide an address."})
+//     }
+//     geocode(req.query.address).then(({longitude,latitude,location}={})=>{
+//         forecast(longitude,latitude).then((forecastData)=>{
+//             res.send({
+//                 location:location,
+//                 forecast:forecastData
+//             })
+//         }).catch((error)=>res.send({error}))
+//     }).catch((error)=>res.send({error}))
+// })
+
+app.get('/weather',async (req,res)=>{
     if(!req.query.address){
         return res.send({ error:"You must provide an address."})
     }
-    geocode(req.query.address).then(({longitude,latitude,location}={})=>{
-        forecast(longitude,latitude).then((forecastData)=>{
-            res.send({
-                location:location,
-                forecast:forecastData
-            })
-        }).catch((error)=>console.log(error))
-    }).catch((error)=>console.log(error))
+
+    const addressToForecast=async (address)=>{
+        const geoCode=await geocode(address);
+        const weather=await forecast(geoCode.longitude,geoCode.latitude);
+        return {
+            location:geoCode.location,
+            forecast:weather
+        };
+    }
+
+    addressToForecast(req.query.address).then((result)=>{
+        res.send(result);
+    }).catch((error)=>{res.send({error})});
 })
+
+
 
 app.get('/products',(req,res)=>{
     if(!req.query.search){
